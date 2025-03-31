@@ -39,7 +39,7 @@ def test(args):
   frame_width = int(cap.get(3))
   frame_height = int(cap.get(4))
   size = (frame_width, frame_height)
-  out = cv2.VideoWriter('output.mp4',
+  result = cv2.VideoWriter('output.mp4',
                       cv2.VideoWriter_fourcc(*'MJPG'),  # Codec MJPEG
                       int(cap.get(cv2.CAP_PROP_FPS)),  # FPS (Frame Per Second)
                       size)
@@ -65,10 +65,10 @@ def test(args):
           category = categories[label]
           cv2.putText(frame, category, (int(xmin), int(ymin)), cv2.FONT_HERSHEY_SIMPLEX ,
                       1, (0, 255, 0), 3, cv2.LINE_AA)
-    out.write(frame)
+    result.write(frame)
   
   cap.release()
-  out.release()
+  result.release()
 
 
 
