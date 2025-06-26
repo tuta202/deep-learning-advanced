@@ -40,7 +40,7 @@ def test(args):
   frame_height = int(cap.get(4))
   size = (frame_width, frame_height)
   result = cv2.VideoWriter('output.mp4',
-                      cv2.VideoWriter_fourcc(*'MJPG'),  # Codec MJPEG
+                      cv2.VideoWriter_fourcc(*'mp4v'),  # Codec MJPEG
                       int(cap.get(cv2.CAP_PROP_FPS)),  # FPS (Frame Per Second)
                       size)
   while cap.isOpened():
@@ -69,7 +69,11 @@ def test(args):
   
   cap.release()
   result.release()
-
+  
+  if os.path.exists("output.mp4"):
+      print("✅ Video saved successfully!")
+  else:
+      print("❌ Failed to save video.")
 
 
 
