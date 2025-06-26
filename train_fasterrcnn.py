@@ -12,9 +12,9 @@ from tqdm.autonotebook import tqdm
 from torch.utils.tensorboard import SummaryWriter
 from torchmetrics.detection.mean_ap import MeanAveragePrecision
 from pprint import pprint
+import multiprocessing
 
 torch.multiprocessing.set_sharing_strategy('file_system')
-
 
 def collate_fn(batch):
   images, labels = zip(*batch)
@@ -38,6 +38,8 @@ def get_args():
 
 
 def train(args):
+  num_workers = int(multiprocessing.cpu_count() - 2)
+  
   device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
   train_transform = Compose([
       RandomAffine(
@@ -60,7 +62,7 @@ def train(args):
     dataset=train_dataset,
     batch_size=args.batch_size,
     shuffle=True,
-    num_workers=4,
+    num_workers=num_workers,
     collate_fn=collate_fn
   )
   val_dataset = VOCDataset(root=args.data_path, year=args.year, image_set="val", download=False,
@@ -69,7 +71,7 @@ def train(args):
       dataset=val_dataset,
       batch_size=args.batch_size,
       shuffle=True,
-      num_workers=4,
+      num_workers=num_workers,
       collate_fn=collate_fn
   )
   model = fasterrcnn_mobilenet_v3_large_320_fpn(weights=FasterRCNN_MobileNet_V3_Large_320_FPN_Weights.DEFAULT,

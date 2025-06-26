@@ -1,1 +1,6 @@
 my_pascal_voc/
+trained_models/
+tensorboard/
+runs/*
+__pycache__/
+*.pt
