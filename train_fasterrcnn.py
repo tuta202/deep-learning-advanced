@@ -82,8 +82,9 @@ def train(args):
                                                     num_classes=len(train_dataset.categories))
   optimizer = torch.optim.SGD(params=model.parameters(), lr=1e-3, momentum=0.9)
   if args.saved_checkpoint:
-    checkpoint = torch.load(args.saved_checkpoint,
-                            map_location=lambda storage, loc: storage.cuda(torch.cuda.current_device()))
+    map_location = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    checkpoint = torch.load(args.saved_checkpoint, map_location=map_location)
+
     model.load_state_dict(checkpoint["model_state_dict"])
     # optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
     start_epoch = checkpoint["epoch"]
